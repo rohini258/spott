@@ -10,7 +10,7 @@ import { useStoreUser } from '@/hooks/use-store-user';
 import { Plus, Tickets,Building} from 'lucide-react';
 const Header = () => {
  const{isLoading}= useStoreUser();
-  const [showUpgradeModal,setshowUpgradeModal]= useState()
+  const [showUpgradeModal,setshowUpgradeModal]= useState(false)
   return(
      <>
   <nav className="fixed top-0  left-0 right-0 bg-neutral-950/80 backdrop-blur-xl z-20">
@@ -37,7 +37,8 @@ const Header = () => {
                <Button size="sm">Sign In </Button>
                </SignInButton> 
             </Unauthenticated>
-            <Button variant={"ghost"} size="sm" onClick={setshowUpgradeModal}>
+            <Button variant={"ghost"} size="sm" 
+            onClick={()=>setshowUpgradeModal(true)}>
                 Pricing
               </Button>
               <Button variant="ghost" size="sm"className={"mr-2"}>
