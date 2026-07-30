@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/react";
+import { useUser } from "@clerk/nextjs";
 import { useConvexAuth } from "convex/react";
 import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
@@ -23,9 +23,13 @@ export function useStoreUser() {
     // Recall that `storeUser` gets the user information via the `auth`
     // object on the server. You don't need to pass anything manually here.
     async function createUser() {
-      const id = await storeUser();
-      setUserId(id);
-    }
+  try {
+    const id = await storeUser();
+    setUserId(id);
+  } catch (error) {
+    console.error("Error storing user:", error);
+  }
+}
     createUser();
     return () => setUserId(null);
     // Make sure the effect reruns if the user logs in with

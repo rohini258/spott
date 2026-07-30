@@ -1,16 +1,26 @@
 'use client'
+import { Badge } from "@/components/ui/badge";
+import { Crown} from "lucide-react";
 import React, { useState } from 'react'
 import Image from "next/image";
 import Link from "next/link";
+import UpgradeModal from "@/components/upgrade-modal";
 import { Button } from "@/components/ui/button";
-import {SignInButton, UserButton } from '@clerk/nextjs'
+import {SignInButton,useAuth,UserButton } from '@clerk/nextjs'
 import { Authenticated, Unauthenticated } from 'convex/react';
 import {BarLoader} from "react-spinners";
 import { useStoreUser } from '@/hooks/use-store-user';
 import { Plus, Tickets,Building} from 'lucide-react';
+import { useOnboarding } from '@/hooks/use-onboarding';
+import OnboardingModal from './onboarding-modal';
+import SearchLocationBar from './search-location-bar';
 const Header = () => {
  const{isLoading}= useStoreUser();
-  const [showUpgradeModal,setshowUpgradeModal]= useState(false)
+  const [showUpgradeModal,setshowUpgradeModal]= useState(false);
+  const{showOnboarding,handleOnboardingComplete,handleOnboardingSkip}=useOnboarding();
+  const { has, isLoaded } = useAuth();
+
+const hasPro = isLoaded && has({ plan: "pro" });
   return(
      <>
   <nav className="fixed top-0  left-0 right-0 bg-neutral-950/80 backdrop-blur-xl z-20">
@@ -27,9 +37,21 @@ const Header = () => {
            />
            
         {/* pro badge */}
+        {hasPro && (
+          <Badge className="bg-linear-to-r from-pink-500 to-orange-500 gap-1 text-white ml-3">
+            <Crown className="w-3 h-3" />
+            Pro
+          </Badge>
+        )}
         </Link>
 
         {/* Search and location for the desktop */}
+        <div className="hidden md:flex flex-1 justify-center">
+          <SearchLocationBar />
+
+        </div>
+       
+
           {/* Right side actions */}
           <div className=" flex items-center">
          <Unauthenticated when="signed-out">
@@ -41,6 +63,7 @@ const Header = () => {
             onClick={()=>setshowUpgradeModal(true)}>
                 Pricing
               </Button>
+            
               <Button variant="ghost" size="sm"className={"mr-2"}>
                <Link href="explore">Explore</Link>
               </Button>
@@ -71,6 +94,10 @@ const Header = () => {
           </div>
     </div>
      {/* Mobile search and location-below header */}
+     <div className="md:hidden border-t px-3 py-3">
+          <SearchLocationBar />
+
+        </div>
      {/* loader */}
      {isLoading && (
       <div className="absolute bottom-0 left-0 w-full"> 
@@ -79,6 +106,16 @@ const Header = () => {
      )}
   </nav>
   {/* Modals */}
+  <OnboardingModal 
+  isOpen={showOnboarding}
+  onClose={handleOnboardingSkip}
+  onComplete={handleOnboardingComplete}
+  />
+  <UpgradeModal
+  isOpen={showUpgradeModal}
+  onClose={()=>setshowUpgradeModal(false)}
+  trigger="header"
+  />
   </>
     
     
