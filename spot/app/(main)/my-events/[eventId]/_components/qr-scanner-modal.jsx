@@ -53,7 +53,7 @@ export default function QRScannerModal({ isOpen, onClose }) {
 
       console.log("QR from image:", decodedText);
 
-      await handleCheckIn(decodedText);
+      await handleCheckIn("PASTE_THE_QR_CODE_FROM_CONVEX_HERE");
 
       qrScanner.clear();
 
