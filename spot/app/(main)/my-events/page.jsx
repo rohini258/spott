@@ -64,7 +64,7 @@ export default function MyEventsPage() {
                 Create your first event and start managing attendees
               </p>
               <Button  className="gap-2">
-                {<Link href="/create-event">
+                render={<Link href="/create-event">
                   <Plus className="w-4 h-4" />
                 </Link>}
                  Create Your First Event
