@@ -66,8 +66,8 @@ export default function MyEventsPage() {
               <Button  className="gap-2">
                 render={<Link href="/create-event">
                   <Plus className="w-4 h-4" />
-                  Create Your First Event
                 </Link>}
+                 Create Your First Event
               </Button>
             </div>
           </Card>
