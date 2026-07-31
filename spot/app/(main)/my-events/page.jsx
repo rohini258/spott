@@ -63,12 +63,13 @@ export default function MyEventsPage() {
               <p className="text-muted-foreground">
                 Create your first event and start managing attendees
               </p>
-              <Button  className="gap-2">
-                render={<Link href="/create-event">
-                  <Plus className="w-4 h-4" />
-                </Link>}
-                 Create Your First Event
-              </Button>
+              <Button
+  className="gap-2"
+  onClick={() => router.push("/create-event")}
+>
+  <Plus className="w-4 h-4" />
+  Create Your First Event
+</Button>
             </div>
           </Card>
         ) : (
