@@ -20,32 +20,43 @@ export default function AIEventCreator({ onEventGenerated }) {
   const [loading, setLoading] = useState(false);
 
   const generateEvent = async () => {
-    if (!prompt.trim()) {
-      toast.error("Please describe your event");
-      return;
-    }
+  if (!prompt.trim()) {
+    toast.error("Please describe your event");
+    return;
+  }
 
-    setLoading(true);
-    try {
-      const response = await fetch("/api/generate-event", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
+  setLoading(true);
 
-      const data = await response.json();
-      onEventGenerated(data);
-      toast.success("Event details generated! Review and customize below.");
-      setIsOpen(false);
-      setPrompt("");
-    } catch (error) {
-      toast.error("Failed to generate event. Please try again.");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const response = await fetch("/api/generate-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
 
+    const data = await response.json();
+
+console.log("API Response:", data);
+
+if (!response.ok) {
+  toast.error(data.error || "Generation failed");
+  return;
+}
+
+onEventGenerated(data);
+toast.success("Event details generated!");
+
+    setPrompt("");
+    setIsOpen(false);
+  } catch (err) {
+    console.error("Generate Event Error:", err);
+    toast.error(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger render ={<Button variant="outline" className="gap-2">  Generate with AI</Button>}>

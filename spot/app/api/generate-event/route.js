@@ -56,15 +56,18 @@ Rules:
     }
 
     console.log(cleanedText);
-
+    console.log("Gemini Response:");
     const eventData = JSON.parse(cleanedText);
 
     return NextResponse.json(eventData);
   } catch (error) {
-    console.error("Error generating event:", error);
-    return NextResponse.json(
-      { error: "Failed to generate event" + error.message },
-      { status: 500 }
-    );
-  }
+    console.error(error);
+
+    return NextResponse.json({
+        error: error.message,
+        stack: error.stack
+    }, {
+        status: 500
+    });
+}
 }
